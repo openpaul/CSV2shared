@@ -39,19 +39,20 @@ class csv2shared():
                 # split fields         
                 fields = line.split(self.sep)
                 
-                #validate N Fields
+                #validate N Fields 
                 if self.Nfields == 0:
                     self.Nfields = len(fields) 
                 elif self.Nfields != len(fields):
                     print("Ahh field lenth does not match")
                 
                 OTU.append(fields)
-                print('read line: ' + str(n) + " " + OTU[n][0])
+                if n % 10 == 0: # print each 10
+                    print('read line: ' + str(n) + " " + OTU[n][0])
                 #pprint(fields)
                 n = n + 1
         self.Nline = n
         self.fin.close()
-       
+        
         return OTU
         
     def writeFile(self):
@@ -62,14 +63,26 @@ class csv2shared():
         self.writeLine(header)
         print('Print header, done')
         i = 0
-        while i < self.Nfields - 1:
-            i = i + 1
-
-
-            col = [self.label, self.Nline - 1]
-            col = col + self.returnColum(i)
-            print('Processed' + str(i) + ' called ' + str(col[2]))
-            self.writeLine(col)
+        
+        # we dont just print each smaple
+        # we sort them alphabetical to be more prettu
+        s = map(str.strip, self.OTU[0])
+        index = sorted(range(len(s)), key=lambda k: s[k])
+  
+        n = 0
+        for i in index:
+            if i != 0:
+                col = [self.label, self.Nline - 1]
+                col = col + self.returnColum(i)
+                if n % 10 == 0: # print each 10
+                    print('Processed sample called ' + str(col[2]))
+                # switch 2 and 3 eg 1 and 2
+                a       = col[1]
+                b       = col[2]
+                col[1]  = b
+                col[2]  = a
+                self.writeLine(col)
+                n = n + 1
             
     
     def returnColum(self, n):
