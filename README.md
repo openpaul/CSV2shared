@@ -10,9 +10,9 @@ It requires python 2.7 and could be easily ported to Python 3.
 
 Just call the scrip via 
 
-'''
+```
 python CSV2shared.py input.csv output.shared
-'''
+```
 
 Adjust the field delimiter if needed.
 
