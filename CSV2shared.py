@@ -126,7 +126,7 @@ class csv2shared():
                 self.writeLine(col)
                 
                 if n % 100 == 0: # print each 10
-                    print('Processed sample called ' + str(col[2]))
+                    print('Processed sample called ' + str(col[1]))
                     
                 
                 n = n + 1 # step counter raise
@@ -140,9 +140,20 @@ class csv2shared():
         returns them as a list
         '''
         col = []
+        first = True
         for line in self.OTU:
-            col.append(line[n].strip())
-        
+            f = line[n].strip()
+            # type conversion of scientific annotation
+            # as with mothur:
+            '''
+            the shared file only uses integers, any float 
+            values will be rounded down to the nearest integer.
+            '''
+            if n != 0 and first != True:
+                f = int(float(f))
+            
+            col.append(f)
+            first =False
 
         return col
             
